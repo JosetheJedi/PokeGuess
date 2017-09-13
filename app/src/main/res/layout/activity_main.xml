@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.josef.pokeguess.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/battle_cry"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:text="Battle Cry"
+            android:layout_marginTop="147dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/shadow_button"
+            android:layout_alignStart="@+id/shadow_button" />
+
+        <Button
+            android:id="@+id/shadow_button"
+            android:layout_width="289dp"
+            android:layout_height="wrap_content"
+            android:text="Shadow Quiz"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/battle_cry"
+            android:layout_alignRight="@+id/type_button"
+            android:layout_alignEnd="@+id/type_button" />
+
+        <Button
+            android:id="@+id/type_button"
+            android:layout_width="291dp"
+            android:layout_height="wrap_content"
+            android:text="Type Quiz"
+            android:layout_marginTop="14dp"
+            android:layout_below="@+id/shadow_button"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/pokedex_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Pokedex"
+            android:layout_below="@+id/type_button"
+            android:layout_alignRight="@+id/type_button"
+            android:layout_alignEnd="@+id/type_button"
+            android:layout_alignLeft="@+id/type_button"
+            android:layout_alignStart="@+id/type_button" />
+
+        <Button
+            android:id="@+id/leaderboards_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/pokedex_button"
+            android:layout_alignLeft="@+id/pokedex_button"
+            android:layout_alignRight="@+id/pokedex_button"
+            android:layout_alignStart="@+id/pokedex_button"
+            android:layout_alignTop="@+id/pokedex_button"
+            android:layout_marginTop="62dp"
+            android:text="Leaderboards" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
