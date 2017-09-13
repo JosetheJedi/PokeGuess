@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- Animation frames are wheel0.png through wheel5.png
+     files inside the res/drawable/ folder -->
+<animation-list
+    android:oneshot="false"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:drawable="@drawable/poke_logo1" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo2" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo3" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo4" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo5" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo6" android:duration="250" />
+        <item android:drawable="@drawable/poke_logo7" android:duration="250" />
+    </animation-list>
