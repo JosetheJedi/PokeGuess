@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PokeGuess</string>
+    <string name="title_activity_battle_cry_quiz">BattleCryQuiz</string>
 </resources>
