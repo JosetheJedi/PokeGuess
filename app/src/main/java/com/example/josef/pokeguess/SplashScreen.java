@@ -18,7 +18,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_splash_screen); // tells the activity which xml file to use
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getSupportActionBar().setTitle("");
@@ -49,7 +49,7 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 try {
                     super.run();
-                    sleep(5100);  //Delay of 10 seconds
+                    sleep(5500);  //Delay of 5.5 seconds
                 } catch (Exception e) {
 
                 } finally {

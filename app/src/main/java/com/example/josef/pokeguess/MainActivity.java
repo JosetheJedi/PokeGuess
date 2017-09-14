@@ -13,33 +13,67 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     Button battleB, shadowB, typeB, pokedexB, leaderboardB;
+    MediaPlayer mediaPlayer; // object to load a song and play it
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // tells the activity which xml file to use
 
+        // to make the actionbar at the top transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
+        // sets the song to use for the main menu
+        mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
+
+        // making the song to loop once it ends
         mediaPlayer.setLooping(true);
-        mediaPlayer.start(); // no need to call prepare(); create() does that for you
 
+        mediaPlayer.start(); // will start playing the song when the main menu is created.
+
+        // linking all the buttons from the main menu to java code
+        // to be able to manipulate the activity.
         battleB = (Button) findViewById(R.id.battle_cry);
         shadowB = (Button) findViewById(R.id.shadow_button);
         typeB = (Button) findViewById(R.id.type_button);
         pokedexB = (Button) findViewById(R.id.pokedex_button);
         leaderboardB = (Button) findViewById(R.id.leaderboards_button);
 
+        // the action that will occur when the battle_cry button is pressed.
         battleB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // this will link this activity to the battlecryquiz activity
                 Intent intent = new Intent(MainActivity.this, BattleCryQuiz.class);
+
+                // the music from the main_menu activity will be paused
+                mediaPlayer.pause();
+
+                // this will switch to the new activity.
                 startActivity(intent);
             }
         });
+
+    }
+
+    // this code will run when the application goes to another screen
+    // or when the app is sent to the background.
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // will pause the song
+        mediaPlayer.pause();
+
+    }
+
+
+    // this code will run when the application resumes.
+    // when returning from another activity.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // will start the song.
+        mediaPlayer.start();
     }
 }
