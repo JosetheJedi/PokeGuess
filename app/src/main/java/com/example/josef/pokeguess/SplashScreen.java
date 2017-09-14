@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -38,6 +39,9 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
+        final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.loading_song);
+        mediaPlayer.start(); // no need to call prepare(); create() does that for you
+
 
         Thread welcomeThread = new Thread() {
 
@@ -45,13 +49,14 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 try {
                     super.run();
-                    sleep(5000);  //Delay of 10 seconds
+                    sleep(5100);  //Delay of 10 seconds
                 } catch (Exception e) {
 
                 } finally {
 
                     Intent i = new Intent(SplashScreen.this,
                             MainActivity.class);
+
                     startActivity(i);
                     finish();
                 }
