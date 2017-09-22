@@ -57,6 +57,7 @@ public class SplashScreen extends AppCompatActivity {
                     Intent i = new Intent(SplashScreen.this,
                             MainActivity.class);
 
+                    mediaPlayer.release();
                     startActivity(i);
                     finish();
                 }
