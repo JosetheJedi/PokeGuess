@@ -14,6 +14,9 @@ public class PokemonTable {
     public static final String POKEMON_IMAGE = "pokemonImage";
     public static final String POKEMON_SHADOW = "pokemonShadow";
 
+    public static final String[] ALL_COLUMNS =
+            {POKEMON_ID, POKEMON_NAME, POKEMON_TYPE, POKEMON_SOUND, POKEMON_IMAGE, POKEMON_SHADOW};
+
 
     public static final String SQL_CREATE =
             "CREATE TABLE " + POKEMON_TABLE + "(" +

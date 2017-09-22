@@ -7,9 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.example.josef.pokeguess.database.DataSource;
+
+import java.util.List;
+
 public class BattleCryQuiz extends AppCompatActivity {
 
     MediaPlayer media;
+    DataSource mDataSource;
+    List<Pokemon> pokemonList = PokemonDataProvider.pokemonList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,17 +28,29 @@ public class BattleCryQuiz extends AppCompatActivity {
         media = MediaPlayer.create(this, R.raw.pokemon_battle);
         media.setLooping(true);
         media.start();
+
+         /*
+        this will create the database if it has not yet been created.
+         */
+
+        mDataSource = new DataSource(this);
+        mDataSource.open();
+        mDataSource.seedDatabase(pokemonList);
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         media.pause();
+        mDataSource.close();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         media.start();
+        mDataSource.open();
     }
 }

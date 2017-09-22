@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     Button battleB, shadowB, typeB, pokedexB, leaderboardB;
     MediaPlayer mediaPlayer; // object to load a song and play it
-    List<Pokemon> pokemonList = PokemonDataProvider.pokemonList;
-    DataSource mDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,25 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         mediaPlayer.start(); // will start playing the song when the main menu is created.
 
-        /*
-        this will create the database if it has not yet been created.
-         */
-
-        mDataSource = new DataSource(this);
-        mDataSource.open();
-
-        long numPokemon = mDataSource.getDataItemsCount();
-
-        if(numPokemon == 0){
-            for (Pokemon p: pokemonList
-                    ) {
-                try {
-                    mDataSource.createItem(p);
-                } catch (SQLiteException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
         // linking all the buttons from the main menu to java code
         // to be able to manipulate the activity.
@@ -95,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         // will pause the song
         mediaPlayer.pause();
-        mDataSource.close();
 
     }
 
@@ -107,6 +85,5 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // will start the song.
         mediaPlayer.start();
-        mDataSource.open();
     }
 }

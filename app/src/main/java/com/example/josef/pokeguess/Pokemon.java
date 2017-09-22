@@ -18,6 +18,10 @@ public class Pokemon {
     private String shadow;
     private String type;
 
+    public Pokemon(){
+
+    }
+
     public Pokemon(String ID, String name, String sound, String image, String shadow, String type){
         this.ID = ID;
         this.name = name;
