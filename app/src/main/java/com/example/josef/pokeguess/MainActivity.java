@@ -1,6 +1,9 @@
 package com.example.josef.pokeguess;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -10,10 +13,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.josef.pokeguess.database.DBHelper;
+import com.example.josef.pokeguess.database.DataSource;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     Button battleB, shadowB, typeB, pokedexB, leaderboardB;
     MediaPlayer mediaPlayer; // object to load a song and play it
+    List<Pokemon> pokemonList = PokemonDataProvider.pokemonList;
+    DataSource mDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +42,26 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.setLooping(true);
 
         mediaPlayer.start(); // will start playing the song when the main menu is created.
+
+        /*
+        this will create the database if it has not yet been created.
+         */
+
+        mDataSource = new DataSource(this);
+        mDataSource.open();
+
+        long numPokemon = mDataSource.getDataItemsCount();
+
+        if(numPokemon == 0){
+            for (Pokemon p: pokemonList
+                    ) {
+                try {
+                    mDataSource.createItem(p);
+                } catch (SQLiteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         // linking all the buttons from the main menu to java code
         // to be able to manipulate the activity.
@@ -64,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         // will pause the song
         mediaPlayer.pause();
+        mDataSource.close();
 
     }
 
@@ -75,5 +107,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // will start the song.
         mediaPlayer.start();
+        mDataSource.open();
     }
 }
