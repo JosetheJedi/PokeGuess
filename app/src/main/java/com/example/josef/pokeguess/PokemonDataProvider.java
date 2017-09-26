@@ -45,10 +45,10 @@ public class PokemonDataProvider {
         addPokemon(new Pokemon("026", "Raichu", "sound026", "p026", "s026", "Electric"));
         addPokemon(new Pokemon("027", "Sandshrew", "sound027", "p027", "s027", "Ground"));
         addPokemon(new Pokemon("028", "Sandslash", "sound028", "p028", "s028", "Ground"));
-        addPokemon(new Pokemon("029", "Nidoran?", "sound029", "p029", "s029", "Poison"));
+        addPokemon(new Pokemon("029", "Nidoran (i)", "sound029", "p029", "s029", "Poison"));
         addPokemon(new Pokemon("030", "Nidorina", "sound030", "p030", "s030", "Poison"));
         addPokemon(new Pokemon("031", "Nidoqueen", "sound031", "p031", "s031", "Poison"));
-        addPokemon(new Pokemon("032", "Nidoran?", "sound032", "p032", "s032", "Poison"));
+        addPokemon(new Pokemon("032", "Nidoran 8=D", "sound032", "p032", "s032", "Poison"));
         addPokemon(new Pokemon("033", "Nidorino", "sound033", "p033", "s033", "Poison"));
         addPokemon(new Pokemon("034", "Nidoking", "sound034", "p034", "s034", "Poison"));
         addPokemon(new Pokemon("035", "Clefairy", "sound035", "p035", "s035", "Normal"));
@@ -138,7 +138,7 @@ public class PokemonDataProvider {
         addPokemon(new Pokemon("119", "Seaking", "sound119", "p119", "s119", "Water"));
         addPokemon(new Pokemon("120", "Staryu", "sound120", "p120", "s120", "Water"));
         addPokemon(new Pokemon("121", "Starmie", "sound121", "p121", "s121", "Water"));
-        addPokemon(new Pokemon("122", "Mr.", "sound122", "p122", "s122", "Mime"));
+        addPokemon(new Pokemon("122", "Mr.Mime", "sound122", "p122", "s122", "Psychic"));
         addPokemon(new Pokemon("123", "Scyther", "sound123", "p123", "s123", "Bug"));
         addPokemon(new Pokemon("124", "Jynx", "sound124", "p124", "s124", "Ice"));
         addPokemon(new Pokemon("125", "Electabuzz", "sound125", "p125", "s125", "Electric"));

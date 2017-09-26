@@ -45,7 +45,7 @@ public class TypeQuiz extends AppCompatActivity {
 
     String types[] = {"Normal", "Fighting", "Fire", "Water", "Flying", "Grass", "Poison",
                         "Electric", "Ground", "Psychic", "Rock", "Ice", "Bug", "Dragon",
-                            "Ghost", "Dark", "Steel", "Fairy"};
+                            "Ghost", "Steel"};
     String dummyP1 = "";
     String dummyP2 = "";
 
@@ -144,18 +144,18 @@ public class TypeQuiz extends AppCompatActivity {
         // debugging purpose: displays how many pokemon we have guessed.
         Log.e(TAG, "loadPokemon: " + counter);
 
-        int dummy = rand.nextInt(18);
-        int dummy2 = rand.nextInt(18);
+        int dummy = rand.nextInt(15);
+        int dummy2 = rand.nextInt(15);
 
         dummyP1 = types[dummy];
         dummyP2 = types[dummy2];
 
         while(dummyP1.equalsIgnoreCase(currentPokemon.getType())){
-            dummy = rand.nextInt(18);
+            dummy = rand.nextInt(15);
             dummyP1 = types[dummy];
         }
         while(dummyP2.equalsIgnoreCase(dummyP1) || dummyP2.equalsIgnoreCase(currentPokemon.getType())){
-            dummy2 = rand.nextInt(18);
+            dummy2 = rand.nextInt(15);
             dummyP2 = types[dummy2];
         }
 
