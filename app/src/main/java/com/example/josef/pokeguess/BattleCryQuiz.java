@@ -22,11 +22,21 @@ import java.util.Random;
 public class BattleCryQuiz extends AppCompatActivity {
 
     MediaPlayer media, battleCry;
+
+    // This will open up the database connection
     DataSource mDataSource;
+
+    // will generate a list with all the pokemon information
     List<Pokemon> pokemonList = PokemonDataProvider.pokemonList;
+
+    // all Views
     ImageButton soundB;
     Button option1, option2, option3;
+
+    // will hold all the pokemon info retreived from the database
     List<Pokemon> pokemons;
+
+    // the pokemon that we are going to work with
     Pokemon currentPokemon;
     Pokemon dummyP1, dummyP2;
     int counter = 0;
@@ -178,7 +188,7 @@ public class BattleCryQuiz extends AppCompatActivity {
         // get and render current cry
         String currentCry = "raw/" + currentPokemon.getSound();
 
-        System.out.println("*****\n*\n*\n*\n*" + currentCry);
+        System.out.println("*****\n*\n*\n*\n*" + currentPokemon.getName());
 
         int resId = getResources().getIdentifier(currentCry, null, this.getPackageName());
 

@@ -24,7 +24,12 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".ShadowQuiz"></activity>
+        <activity android:name=".ShadowQuiz" />
+        <activity android:name=".TypeQuiz"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />></activity>
     </application>
 
 </manifest>
