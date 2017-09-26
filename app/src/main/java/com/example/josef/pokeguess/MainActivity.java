@@ -55,6 +55,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // the action that will occur when the battle_cry button is pressed.
+        shadowB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // this will link this activity to the shadowquiz activity
+                Intent intent = new Intent(MainActivity.this, ShadowQuiz.class);
+
+                // the music from the main_menu activity will be paused
+                mediaPlayer.pause();
+
+                // this will switch to the new activity.
+                startActivity(intent);
+            }
+        });
+
     }
 
     // this code will run when the application goes to another screen
