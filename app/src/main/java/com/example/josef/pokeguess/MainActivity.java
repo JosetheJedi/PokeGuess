@@ -94,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        pokedexB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent( MainActivity.this, Pokedex.class);
+
+                mediaPlayer.pause();
+
+                startActivity(intent1);
+            }
+        });
+
     }
 
     // this code will run when the application goes to another screen
