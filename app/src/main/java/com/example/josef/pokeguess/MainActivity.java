@@ -1,6 +1,9 @@
 package com.example.josef.pokeguess;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -10,10 +13,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.josef.pokeguess.database.DBHelper;
+import com.example.josef.pokeguess.database.DataSource;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     Button battleB, shadowB, typeB, pokedexB, leaderboardB;
     MediaPlayer mediaPlayer; // object to load a song and play it
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.setLooping(true);
 
         mediaPlayer.start(); // will start playing the song when the main menu is created.
+
 
         // linking all the buttons from the main menu to java code
         // to be able to manipulate the activity.
@@ -61,6 +71,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // this will link this activity to the shadowquiz activity
                 Intent intent = new Intent(MainActivity.this, ShadowQuiz.class);
+
+                // the music from the main_menu activity will be paused
+                mediaPlayer.pause();
+
+                // this will switch to the new activity.
+                startActivity(intent);
+            }
+        });
+
+        typeB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // this will link this activity to the type quiz activity
+                Intent intent = new Intent(MainActivity.this, TypeQuiz.class);
 
                 // the music from the main_menu activity will be paused
                 mediaPlayer.pause();
