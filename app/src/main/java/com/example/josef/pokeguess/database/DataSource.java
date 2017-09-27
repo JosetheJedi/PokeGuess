@@ -80,6 +80,8 @@ public class DataSource {
             pokemons.add(p);
         }
 
+        cursor.close();
+
         return pokemons;
     }
 }
