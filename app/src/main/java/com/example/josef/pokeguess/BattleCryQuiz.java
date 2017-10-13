@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.josef.pokeguess.database.DataSource;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +37,7 @@ public class BattleCryQuiz extends AppCompatActivity {
 
     // will hold all the pokemon info retreived from the database
     List<Pokemon> pokemons;
+    List<Pokemon> pkmCaught;
 
     // the pokemon that we are going to work with
     Pokemon currentPokemon;
@@ -67,6 +70,8 @@ public class BattleCryQuiz extends AppCompatActivity {
         // make list of pokemon from database
         pokemons = mDataSource.getAllItems();
 
+        pkmCaught = new ArrayList<>();
+
         Collections.shuffle(pokemons);
 
         // connecting buttons from xml
@@ -90,13 +95,7 @@ public class BattleCryQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option1.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(BattleCryQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -105,13 +104,7 @@ public class BattleCryQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option2.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(BattleCryQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -120,41 +113,69 @@ public class BattleCryQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option3.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(BattleCryQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
 
     }
 
+    // this method compares the pokemon selected to determine if a new pokemon should be loaded or if the
+    // player has lost the game
+    private void comparePokemon(String poke_selected) {
+        if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
+            pokemonCaught++;
+            pkmCaught.add(currentPokemon);
+            if(currentPokemon.getCaught() != 1){
+                currentPokemon.setCaught(1);
+                mDataSource.updateItem(currentPokemon);
+            }
+
+
+            if(counter == 151){
+                Intent intent = new Intent(BattleCryQuiz.this, EndGame.class);
+                intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+
+                startActivity(intent);
+            }
+            else{
+                loadPokemon();
+            }
+        }
+        else{
+            Intent intent = new Intent(BattleCryQuiz.this, EndGame.class);
+            intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+            intent.putExtra("ACTIVITY", "BATTLECRY");
+            startActivity(intent);
+        }
+    }
+
     protected void loadPokemon(){
         currentPokemon = pokemons.get(counter);
         counter++;
 
-        if(battleCry != null){
+        try{
             battleCry.release();
+            battleCry.reset();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
         }
 
         Random rand = new Random();
 
-        int  dummy = rand.nextInt(151) + 1;
-        int dummy2 = rand.nextInt(151) + 1;
+        int  dummy = rand.nextInt(150);
+        int dummy2 = rand.nextInt(150);
 
         dummyP1 = pokemons.get(dummy);
         dummyP2 = pokemons.get(dummy2);
 
         while(dummyP1 == currentPokemon){
-            dummy = rand.nextInt(151) + 1;
+            dummy = rand.nextInt(150);
             dummyP1 = pokemons.get(dummy);
         }
         while(dummyP2 == dummyP1 || dummyP2 == currentPokemon){
-            dummy2 = rand.nextInt(151) + 1;
+            dummy2 = rand.nextInt(150);
             dummyP2 = pokemons.get(dummy);
         }
 
@@ -162,11 +183,6 @@ public class BattleCryQuiz extends AppCompatActivity {
         Random rand2 = new Random();
 
         int  pos = rand2.nextInt(3) + 1;
-
-//        for (Pokemon n :
-//                pokemons) {
-//            System.out.println(n.getName());
-//        }
 
         if(pos == 1){
             option1.setText(currentPokemon.getName().toString());
@@ -188,8 +204,6 @@ public class BattleCryQuiz extends AppCompatActivity {
         // get and render current cry
         String currentCry = "raw/" + currentPokemon.getSound();
 
-        System.out.println("*****\n*\n*\n*\n*" + currentPokemon.getName());
-
         int resId = getResources().getIdentifier(currentCry, null, this.getPackageName());
 
         battleCry = MediaPlayer.create(BattleCryQuiz.this, resId);
@@ -208,5 +222,13 @@ public class BattleCryQuiz extends AppCompatActivity {
         super.onResume();
         media.start();
         mDataSource.open();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        media.stop();
+        media.release();
+        System.gc();
     }
 }
