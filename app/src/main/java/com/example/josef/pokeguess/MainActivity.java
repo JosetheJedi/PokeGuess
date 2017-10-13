@@ -32,14 +32,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
-
-        // sets the song to use for the main menu
-        mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
-
-        // making the song to loop once it ends
-        mediaPlayer.setLooping(true);
-
-        mediaPlayer.start(); // will start playing the song when the main menu is created.
+        InitializeMediaPlayer();
 
 
         // linking all the buttons from the main menu to java code
@@ -58,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, BattleCryQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.pause();
+                mediaPlayer.stop();
+                mediaPlayer.release();
 
                 // this will switch to the new activity.
                 startActivity(intent);
@@ -73,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ShadowQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.pause();
+                mediaPlayer.stop();
+                mediaPlayer.release();
 
                 // this will switch to the new activity.
                 startActivity(intent);
@@ -87,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, TypeQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.pause();
+                mediaPlayer.stop();
+                mediaPlayer.release();
 
                 // this will switch to the new activity.
                 startActivity(intent);
@@ -100,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent( MainActivity.this, Pokedex.class);
 
-                mediaPlayer.pause();
+                mediaPlayer.stop();
+                mediaPlayer.release();
 
                 startActivity(intent1);
             }
@@ -108,13 +105,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void InitializeMediaPlayer() {
+        // sets the song to use for the main menu
+        mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
+
+        // making the song to loop once it ends
+        mediaPlayer.setLooping(true);
+
+        mediaPlayer.start(); // will start playing the song when the main menu is created.
+    }
+
     // this code will run when the application goes to another screen
     // or when the app is sent to the background.
     @Override
     protected void onPause() {
         super.onPause();
-        // will pause the song
-        mediaPlayer.pause();
+
+        try{
+            mediaPlayer.pause();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
 
     }
 
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // will start the song.
-        mediaPlayer.start();
+
+        InitializeMediaPlayer();
     }
 }
