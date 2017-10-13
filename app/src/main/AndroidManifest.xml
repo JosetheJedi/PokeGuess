@@ -39,7 +39,8 @@
                 android:value=".MainActivity" />
             >
         </activity>
-        <activity android:name=".Pokedex"></activity>
+        <activity android:name=".Pokedex" />
+        <activity android:name=".EndGame"></activity>
     </application>
 
 </manifest>
