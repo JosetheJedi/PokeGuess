@@ -42,6 +42,14 @@ public class DataSource {
         return p;
     }
 
+    public Pokemon updateItem(Pokemon p){
+        ContentValues values = p.toValues();
+        String where = PokemonTable.POKEMON_NAME + " = ?";
+        String[] whereArgs = {p.getName()};
+        mDatabase.update(PokemonTable.POKEMON_TABLE, values, where, whereArgs);
+        return p;
+    }
+
     public long getDataItemsCount(){
         return DatabaseUtils.queryNumEntries(mDatabase, PokemonTable.POKEMON_TABLE);
     }
@@ -76,6 +84,7 @@ public class DataSource {
             p.setImage(cursor.getString(cursor.getColumnIndex(PokemonTable.POKEMON_IMAGE)));
             p.setShadow(cursor.getString(cursor.getColumnIndex(PokemonTable.POKEMON_SHADOW)));
             p.setType(cursor.getString(cursor.getColumnIndex(PokemonTable.POKEMON_TYPE)));
+            p.setCaught(cursor.getInt(cursor.getColumnIndex(PokemonTable.POKEMON_CAUGHT)));
 
             pokemons.add(p);
         }

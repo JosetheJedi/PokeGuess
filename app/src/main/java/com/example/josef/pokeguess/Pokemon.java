@@ -17,18 +17,20 @@ public class Pokemon {
     private String image;
     private String shadow;
     private String type;
+    private int caught;
 
     public Pokemon(){
 
     }
 
-    public Pokemon(String ID, String name, String sound, String image, String shadow, String type){
+    public Pokemon(String ID, String name, String sound, String image, String shadow, String type, int caught){
         this.ID = ID;
         this.name = name;
         this.sound = sound;
         this.image = image;
         this.shadow = shadow;
         this.type = type;
+        this.caught = caught;
     }
 
     public String getID() {
@@ -79,8 +81,16 @@ public class Pokemon {
         this.type = type;
     }
 
+    public int getCaught() {
+        return caught;
+    }
+
+    public void setCaught(int caught) {
+        this.caught = caught;
+    }
+
     public ContentValues toValues(){
-        ContentValues values = new ContentValues(6);
+        ContentValues values = new ContentValues(7);
 
         values.put(PokemonTable.POKEMON_ID, ID);
         values.put(PokemonTable.POKEMON_NAME, name);
@@ -88,6 +98,7 @@ public class Pokemon {
         values.put(PokemonTable.POKEMON_IMAGE, image);
         values.put(PokemonTable.POKEMON_SHADOW, shadow);
         values.put(PokemonTable.POKEMON_TYPE, type);
+        values.put(PokemonTable.POKEMON_CAUGHT, caught);
 
         return values;
     }
