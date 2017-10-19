@@ -6,17 +6,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.josef.pokeguess.database.DataSource;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +33,9 @@ public class BattleCryQuiz extends AppCompatActivity {
     Button option1, option2, option3;
 
     // will hold all the pokemon info retreived from the database
-    List<Pokemon> pokemons;
+    List<Pokemon> pokemonDBList;
+
+    // will be used to keep track of the pokemon that were caught.
     List<Pokemon> pkmCaught;
 
     // the pokemon that we are going to work with
@@ -59,20 +58,15 @@ public class BattleCryQuiz extends AppCompatActivity {
         media.setLooping(true);
         media.start();
 
-         /*
-        this will create the database if it has not yet been created.
-         */
+         // this will create the database if it has not yet been created.
+        openDatabase();
 
-        mDataSource = new DataSource(this);
-        mDataSource.open();
-        mDataSource.seedDatabase(pokemonList);
-
-        // make list of pokemon from database
-        pokemons = mDataSource.getAllItems();
+        // make list of pokemon with information from database
+        pokemonDBList = mDataSource.getAllItems();
 
         pkmCaught = new ArrayList<>();
 
-        Collections.shuffle(pokemons);
+        Collections.shuffle(pokemonDBList);
 
         // connecting buttons from xml
         soundB = (ImageButton) findViewById(R.id.soundButton);
@@ -116,14 +110,19 @@ public class BattleCryQuiz extends AppCompatActivity {
                 comparePokemon(poke_selected);
             }
         });
+    }
 
-
+    private void openDatabase() {
+        mDataSource = new DataSource(this);
+        mDataSource.open();
+        mDataSource.seedDatabase(pokemonList);
     }
 
     // this method compares the pokemon selected to determine if a new pokemon should be loaded or if the
     // player has lost the game
     private void comparePokemon(String poke_selected) {
-        if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
+
+        if(poke_selected.equalsIgnoreCase(currentPokemon.getName())){
             pokemonCaught++;
             pkmCaught.add(currentPokemon);
             if(currentPokemon.getCaught() != 1){
@@ -131,11 +130,10 @@ public class BattleCryQuiz extends AppCompatActivity {
                 mDataSource.updateItem(currentPokemon);
             }
 
-
             if(counter == 151){
                 Intent intent = new Intent(BattleCryQuiz.this, EndGame.class);
                 intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
-
+                clearMemResources();
                 startActivity(intent);
             }
             else{
@@ -146,43 +144,44 @@ public class BattleCryQuiz extends AppCompatActivity {
             Intent intent = new Intent(BattleCryQuiz.this, EndGame.class);
             intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
             intent.putExtra("ACTIVITY", "BATTLECRY");
+            clearMemResources();
             startActivity(intent);
         }
     }
 
+    // This method will load the new pokemon
+    // load the new sound for the current pokemon
+    // and select two other pokemon names to list as options.
     protected void loadPokemon(){
-        currentPokemon = pokemons.get(counter);
-        counter++;
+        currentPokemon = pokemonDBList.get(counter);
+        counter++; // increments to get the next pokemon for the next round.
 
-        try{
-            battleCry.release();
-            battleCry.reset();
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
+        // will clear the current pokemon sound.
+        clearMemResources();
 
+        // get random pokemon names to put as answers.
         Random rand = new Random();
 
-        int  dummy = rand.nextInt(150);
+        int dummy = rand.nextInt(150);
         int dummy2 = rand.nextInt(150);
 
-        dummyP1 = pokemons.get(dummy);
-        dummyP2 = pokemons.get(dummy2);
+        dummyP1 = pokemonDBList.get(dummy);
+        dummyP2 = pokemonDBList.get(dummy2);
 
         while(dummyP1 == currentPokemon){
             dummy = rand.nextInt(150);
-            dummyP1 = pokemons.get(dummy);
+            dummyP1 = pokemonDBList.get(dummy);
         }
         while(dummyP2 == dummyP1 || dummyP2 == currentPokemon){
             dummy2 = rand.nextInt(150);
-            dummyP2 = pokemons.get(dummy);
+            dummyP2 = pokemonDBList.get(dummy);
         }
 
-        // getting random number
+        // getting random number to determine position
+        // of the correct answer.
         Random rand2 = new Random();
 
-        int  pos = rand2.nextInt(3) + 1;
+        int pos = rand2.nextInt(3) + 1;
 
         if(pos == 1){
             option1.setText(currentPokemon.getName().toString());
@@ -200,7 +199,6 @@ public class BattleCryQuiz extends AppCompatActivity {
             option3.setText(currentPokemon.getName().toString());
         }
 
-
         // get and render current cry
         String currentCry = "raw/" + currentPokemon.getSound();
 
@@ -208,6 +206,17 @@ public class BattleCryQuiz extends AppCompatActivity {
 
         battleCry = MediaPlayer.create(BattleCryQuiz.this, resId);
 
+    }
+
+    // releases memory resources from the last pokemon before
+    // loading the new pokemon.
+    private void clearMemResources() {
+        try{
+            battleCry.release();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

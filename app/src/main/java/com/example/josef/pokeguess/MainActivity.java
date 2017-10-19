@@ -1,9 +1,6 @@
 package com.example.josef.pokeguess;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -12,11 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-
-import com.example.josef.pokeguess.database.DBHelper;
-import com.example.josef.pokeguess.database.DataSource;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
         InitializeMediaPlayer();
 
-
         // linking all the buttons from the main menu to java code
         // to be able to manipulate the activity.
         battleB = (Button) findViewById(R.id.battle_cry);
@@ -51,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, BattleCryQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.stop();
-                mediaPlayer.release();
+                stopMusic();
 
                 // this will switch to the new activity.
                 startActivity(intent);
@@ -67,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ShadowQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.stop();
-                mediaPlayer.release();
+                stopMusic();
 
                 // this will switch to the new activity.
                 startActivity(intent);
@@ -82,27 +71,27 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, TypeQuiz.class);
 
                 // the music from the main_menu activity will be paused
-                mediaPlayer.stop();
-                mediaPlayer.release();
+                stopMusic();
 
                 // this will switch to the new activity.
                 startActivity(intent);
             }
         });
 
-
         pokedexB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent( MainActivity.this, Pokedex.class);
 
-                mediaPlayer.stop();
-                mediaPlayer.release();
-
+                stopMusic();
                 startActivity(intent1);
             }
         });
+    }
 
+    private void stopMusic() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
     }
 
     private void InitializeMediaPlayer() {
@@ -111,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
         // making the song to loop once it ends
         mediaPlayer.setLooping(true);
-
-        mediaPlayer.start(); // will start playing the song when the main menu is created.
+        // will start playing the song when the main menu is created.
+        mediaPlayer.start();
     }
 
     // this code will run when the application goes to another screen
@@ -127,9 +116,19 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception ex){
             ex.printStackTrace();
         }
-
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        try{
+            stopMusic();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
 
     // this code will run when the application resumes.
     // when returning from another activity.
@@ -137,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // will start the song.
-
         InitializeMediaPlayer();
     }
 }
