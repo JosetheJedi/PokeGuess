@@ -95,13 +95,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void InitializeMediaPlayer() {
-        // sets the song to use for the main menu
-        mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
 
-        // making the song to loop once it ends
-        mediaPlayer.setLooping(true);
-        // will start playing the song when the main menu is created.
-        mediaPlayer.start();
+        if(mediaPlayer == null){
+            // sets the song to use for the main menu
+            mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
+
+            // making the song to loop once it ends
+            mediaPlayer.setLooping(true);
+        }
+
+        if(!(mediaPlayer.isPlaying())){
+            // will start playing the song when the main menu is created.
+            mediaPlayer.start();
+        }
     }
 
     // this code will run when the application goes to another screen
