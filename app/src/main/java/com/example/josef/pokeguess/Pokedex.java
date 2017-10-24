@@ -55,7 +55,10 @@ public class Pokedex extends AppCompatActivity {
         for (Pokemon p :
                 pokemons) {
             pokArray.add(p.getName());
+            pokArray.add(p.getType());
+            pokArray.add(p.getImage());
             System.out.println(p.getName());
+            System.out.println(p.getType());
         }
 
 
