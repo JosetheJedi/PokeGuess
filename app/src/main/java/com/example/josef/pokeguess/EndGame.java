@@ -26,20 +26,22 @@ public class EndGame extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        int pokemoncaught = intent.getIntExtra("POKEMON_CAUGHT", 0);
+        int pkmCaught = intent.getIntExtra("POKEMON_CAUGHT", 0);
         final String sendingActivity = intent.getStringExtra("ACTIVITY");
 
         score = (TextView) findViewById(R.id.resultText);
         main = (Button) findViewById(R.id.mainB);
         playAgain = (Button) findViewById(R.id.playAgainB);
 
-        score.setText(pokemoncaught + "/151");
+        score.setText(pkmCaught + "/151");
 
 
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EndGame.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -62,6 +64,5 @@ public class EndGame extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
