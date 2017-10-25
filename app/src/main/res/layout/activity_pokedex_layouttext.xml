@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context="com.example.josef.pokeguess.Pokedex">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
 
     <TextView
         android:id="@+id/pokeNumT"
         android:layout_width="wrap_content"
-        android:layout_height="67dp"
-        android:layout_weight="0.73"
-        android:text="TextView" />
+        android:layout_height="wrap_content"
+        android:text="001"
+        android:textSize="25sp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/pokeNamT"
         android:layout_width="wrap_content"
-        android:layout_height="69dp"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_height="wrap_content"
+        android:text="Bulbasaur"
+        android:textSize="25sp"
+        android:layout_alignBaseline="@+id/pokeNumT"
+        android:layout_alignBottom="@+id/pokeNumT"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="65dp"
-        android:layout_height="68dp"
-        app:srcCompat="@drawable/p001" />
-
-
-</LinearLayout>
+        android:id="@+id/pokeImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/p001"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp" />
+</RelativeLayout>
