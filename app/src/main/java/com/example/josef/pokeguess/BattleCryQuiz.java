@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class BattleCryQuiz extends AppCompatActivity {
+public class BattleCryQuiz extends AppCompatActivity implements Quiz {
 
     MediaPlayer media, battleCry;
 
@@ -50,9 +50,7 @@ public class BattleCryQuiz extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_cry_quiz); // tells the activity which xml file to use
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getSupportActionBar().setTitle("");
+        removeActionBar();
 
         media = MediaPlayer.create(this, R.raw.pokemon_battle);
         media.setLooping(true);
@@ -68,12 +66,10 @@ public class BattleCryQuiz extends AppCompatActivity {
 
         Collections.shuffle(pokemonDBList);
 
-        // connecting buttons from xml
-        soundB = (ImageButton) findViewById(R.id.soundButton);
-        option1 = (Button) findViewById(R.id.option1B);
-        option2 = (Button) findViewById(R.id.option2B);
-        option3 = (Button) findViewById(R.id.option3B);
+        // instantiating views from xml
+        instantiateViews();
 
+        // loading the first pokemon
         loadPokemon();
 
 
@@ -112,7 +108,20 @@ public class BattleCryQuiz extends AppCompatActivity {
         });
     }
 
-    private void openDatabase() {
+    public void removeActionBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getSupportActionBar().setTitle("");
+    }
+
+    public void instantiateViews() {
+        soundB = (ImageButton) findViewById(R.id.soundButton);
+        option1 = (Button) findViewById(R.id.option1B);
+        option2 = (Button) findViewById(R.id.option2B);
+        option3 = (Button) findViewById(R.id.option3B);
+    }
+
+    public void openDatabase() {
         mDataSource = new DataSource(this);
         mDataSource.open();
         mDataSource.seedDatabase(pokemonList);
@@ -120,7 +129,7 @@ public class BattleCryQuiz extends AppCompatActivity {
 
     // this method compares the pokemon selected to determine if a new pokemon should be loaded or if the
     // player has lost the game
-    private void comparePokemon(String poke_selected) {
+    public void comparePokemon(String poke_selected) {
 
         if(poke_selected.equalsIgnoreCase(currentPokemon.getName())){
             pokemonCaught++;
@@ -152,7 +161,7 @@ public class BattleCryQuiz extends AppCompatActivity {
     // This method will load the new pokemon
     // load the new sound for the current pokemon
     // and select two other pokemon names to list as options.
-    protected void loadPokemon(){
+    public void loadPokemon(){
         currentPokemon = pokemonDBList.get(counter);
         counter++; // increments to get the next pokemon for the next round.
 
@@ -210,7 +219,7 @@ public class BattleCryQuiz extends AppCompatActivity {
 
     // releases memory resources from the last pokemon before
     // loading the new pokemon.
-    private void clearMemResources() {
+    public void clearMemResources() {
         try{
             battleCry.release();
         }
