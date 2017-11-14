@@ -1,5 +1,6 @@
 package com.example.josef.pokeguess;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -15,11 +16,12 @@ import android.widget.Toast;
 
 import com.example.josef.pokeguess.database.DataSource;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ShadowQuiz extends AppCompatActivity {
+public class ShadowQuiz extends AppCompatActivity implements Quiz{
 
     MediaPlayer media;
 
@@ -45,6 +47,9 @@ public class ShadowQuiz extends AppCompatActivity {
 
     int pokemonCaught = 0, counter = 0;
 
+    // will be used to keep track of the pokemon that were caught.
+    List<Pokemon> pkmCaught;
+
     String dummyP1 = "";
     String dummyP2 = "";
 
@@ -59,26 +64,21 @@ public class ShadowQuiz extends AppCompatActivity {
         media.start();
 
         // to make the actionbar at the top transparent
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
+        removeActionBar();
 
         /*
         this will create the database if it has not yet been created.
          */
-        mDataSource = new DataSource(this);
-        mDataSource.open();
-        mDataSource.seedDatabase(pokemonList);
+        openDatabase();
 
         // make list of pokemon from database
         pokemons = mDataSource.getAllItems();
 
+        pkmCaught = new ArrayList<>();
+
         Collections.shuffle(pokemons);
 
-        pokImg = (ImageView) findViewById(R.id.imagePoke);
-        option1 = (Button) findViewById(R.id.pname1);
-        option2 = (Button) findViewById(R.id.pname2);
-        option3 = (Button) findViewById(R.id.pname3);
+        instantiateViews();
 
         // load the pokemon
         loadPokemon();
@@ -88,13 +88,7 @@ public class ShadowQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option1.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(ShadowQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -103,13 +97,7 @@ public class ShadowQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option2.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(ShadowQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -118,19 +106,27 @@ public class ShadowQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option3.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getName().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(ShadowQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
     }
 
-    protected void loadPokemon(){
+    @Override
+    public void removeActionBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
+    }
+
+    @Override
+    public void openDatabase() {
+        mDataSource = new DataSource(this);
+        mDataSource.open();
+        mDataSource.seedDatabase(pokemonList);
+    }
+
+    public void loadPokemon(){
         currentPokemon = pokemons.get(counter);
         counter++;
 
@@ -186,6 +182,41 @@ public class ShadowQuiz extends AppCompatActivity {
 
         pokImg.setImageResource(resId);
 
+    }
+
+    @Override
+    public void instantiateViews() {
+        pokImg = (ImageView) findViewById(R.id.imagePoke);
+        option1 = (Button) findViewById(R.id.pname1);
+        option2 = (Button) findViewById(R.id.pname2);
+        option3 = (Button) findViewById(R.id.pname3);
+    }
+
+    @Override
+    public void comparePokemon(String poke_selected) {
+        if(poke_selected.equalsIgnoreCase(currentPokemon.getName())){
+            pokemonCaught++;
+            pkmCaught.add(currentPokemon);
+            if(currentPokemon.getCaught() != 1){
+                currentPokemon.setCaught(1);
+                mDataSource.updateItem(currentPokemon);
+            }
+
+            if(counter == 151){
+                Intent intent = new Intent(ShadowQuiz.this, EndGame.class);
+                intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+                startActivity(intent);
+            }
+            else{
+                loadPokemon();
+            }
+        }
+        else{
+            Intent intent = new Intent(ShadowQuiz.this, EndGame.class);
+            intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+            intent.putExtra("ACTIVITY", "SHADOW");
+            startActivity(intent);
+        }
     }
 
     @Override

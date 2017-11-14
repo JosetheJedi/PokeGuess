@@ -1,5 +1,6 @@
 package com.example.josef.pokeguess;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -15,11 +16,12 @@ import android.widget.Toast;
 
 import com.example.josef.pokeguess.database.DataSource;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class TypeQuiz extends AppCompatActivity {
+public class TypeQuiz extends AppCompatActivity implements Quiz {
 
     MediaPlayer media;
 
@@ -48,6 +50,8 @@ public class TypeQuiz extends AppCompatActivity {
                             "Ghost", "Steel"};
     String dummyP1 = "";
     String dummyP2 = "";
+    // will be used to keep track of the pokemon that were caught.
+    List<Pokemon> pkmCaught;
 
     int pokemonCaught = 0, counter = 0;
 
@@ -58,9 +62,7 @@ public class TypeQuiz extends AppCompatActivity {
 
 
         // to make the actionbar at the top transparent
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
+        removeActionBar();
 
         media = MediaPlayer.create(this, R.raw.pokemon_battle);
         media.setLooping(true);
@@ -70,20 +72,15 @@ public class TypeQuiz extends AppCompatActivity {
         /*
         this will create the database if it has not yet been created.
          */
+        openDatabase();
 
-        mDataSource = new DataSource(this);
-        mDataSource.open();
-        mDataSource.seedDatabase(pokemonList);
-
+        pkmCaught = new ArrayList<>();
         // make list of pokemon from database
         pokemons = mDataSource.getAllItems();
 
         Collections.shuffle(pokemons);
 
-        pokImg = (ImageView) findViewById(R.id.imagePoke);
-        option1 = (Button) findViewById(R.id.type1);
-        option2 = (Button) findViewById(R.id.type2);
-        option3 = (Button) findViewById(R.id.type3);
+        instantiateViews();
 
         // load the pokemon
         loadPokemon();
@@ -94,13 +91,7 @@ public class TypeQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option1.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getType().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(TypeQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -109,13 +100,7 @@ public class TypeQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option2.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getType().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(TypeQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
 
@@ -124,18 +109,26 @@ public class TypeQuiz extends AppCompatActivity {
             public void onClick(View view) {
                 poke_selected = option3.getText().toString();
 
-                if(poke_selected.equalsIgnoreCase(currentPokemon.getType().toString())){
-                    pokemonCaught++;
-                    loadPokemon();
-                }
-                else{
-                    Toast.makeText(TypeQuiz.this, "Sorry that is incorrect! :(", Toast.LENGTH_SHORT).show();
-                }
+                comparePokemon(poke_selected);
             }
         });
     }
 
-    protected void loadPokemon(){
+    @Override
+    public void removeActionBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getSupportActionBar().setTitle(""); // getting rid of the text on the actionbar.
+    }
+
+    @Override
+    public void openDatabase() {
+        mDataSource = new DataSource(this);
+        mDataSource.open();
+        mDataSource.seedDatabase(pokemonList);
+    }
+
+    public void loadPokemon(){
         currentPokemon = pokemons.get(counter);
         counter++;
 
@@ -191,6 +184,41 @@ public class TypeQuiz extends AppCompatActivity {
 
         pokImg.setImageResource(resId);
 
+    }
+
+    @Override
+    public void instantiateViews() {
+        pokImg = (ImageView) findViewById(R.id.imagePoke);
+        option1 = (Button) findViewById(R.id.type1);
+        option2 = (Button) findViewById(R.id.type2);
+        option3 = (Button) findViewById(R.id.type3);
+    }
+
+    @Override
+    public void comparePokemon(String poke_selected) {
+        if(poke_selected.equalsIgnoreCase(currentPokemon.getType())){
+            pokemonCaught++;
+            pkmCaught.add(currentPokemon);
+            if(currentPokemon.getCaught() != 1){
+                currentPokemon.setCaught(1);
+                mDataSource.updateItem(currentPokemon);
+            }
+
+            if(counter == 151){
+                Intent intent = new Intent(TypeQuiz.this, EndGame.class);
+                intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+                startActivity(intent);
+            }
+            else{
+                loadPokemon();
+            }
+        }
+        else{
+            Intent intent = new Intent(TypeQuiz.this, EndGame.class);
+            intent.putExtra("POKEMON_CAUGHT", pokemonCaught);
+            intent.putExtra("ACTIVITY", "TYPE");
+            startActivity(intent);
+        }
     }
 
     @Override

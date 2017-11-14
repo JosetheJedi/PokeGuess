@@ -15,5 +15,4 @@ public interface Quiz {
     void loadPokemon();
     void instantiateViews();
     void comparePokemon(String poke_selected);
-    void clearMemResources();
 }
