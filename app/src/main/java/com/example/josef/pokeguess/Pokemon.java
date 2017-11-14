@@ -4,13 +4,14 @@ import android.content.ContentValues;
 
 import com.example.josef.pokeguess.database.PokemonTable;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by Josef on 9/21/2017.
  */
 
-public class Pokemon {
+public class Pokemon implements Serializable{
     private String ID;
     private String name;
     private String sound;

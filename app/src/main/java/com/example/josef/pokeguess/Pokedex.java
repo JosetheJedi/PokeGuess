@@ -1,5 +1,6 @@
 package com.example.josef.pokeguess;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -60,8 +61,14 @@ public class Pokedex extends AppCompatActivity {
         pokeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               String selectedFromList = (String) pokemons.get(i).getName();
-                Toast.makeText(Pokedex.this, "You selected: " + selectedFromList, Toast.LENGTH_SHORT).show();
+                Pokemon p = pokemons.get(i);
+                String selectedFromList = (String) p.getName();
+//                Toast.makeText(Pokedex.this, "You selected: " + selectedFromList, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(Pokedex.this, PokemonInfo.class);
+                intent.putExtra("Pokemon", p);
+                startActivity(intent);
+
             }
         });
     }
