@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/idText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ID"
@@ -55,20 +55,20 @@
         app:layout_constraintLeft_toLeftOf="@+id/pokedexName" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/typeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Type"
         android:textAlignment="center"
         android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/shadowImg1"
+        app:layout_constraintLeft_toLeftOf="@+id/idText"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textView2" />
+        tools:layout_constraintLeft_creator="1" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/shadowImg1"
         android:layout_width="0dp"
         android:layout_height="161dp"
         app:srcCompat="@drawable/s001"
@@ -82,16 +82,15 @@
         app:layout_constraintHorizontal_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/caughtImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="16dp" />
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
