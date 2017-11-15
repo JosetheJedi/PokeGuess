@@ -165,8 +165,10 @@ public class BattleCryQuiz extends AppCompatActivity implements Quiz {
         currentPokemon = pokemonDBList.get(counter);
         counter++; // increments to get the next pokemon for the next round.
 
-        // will clear the current pokemon sound.
-        clearMemResources();
+        if(!(battleCry == null)){
+            // will clear the current pokemon sound.
+            clearMemResources();
+        }
 
         // get random pokemon names to put as answers.
         Random rand = new Random();

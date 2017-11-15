@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 // this will link this activity to the battlecryquiz activity
                 Intent intent = new Intent(MainActivity.this, BattleCryQuiz.class);
 
-                // the music from the main_menu activity will be paused
-                stopMusic();
-
                 // this will switch to the new activity.
                 startActivity(intent);
             }
@@ -56,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
                 // this will link this activity to the shadowquiz activity
                 Intent intent = new Intent(MainActivity.this, ShadowQuiz.class);
 
-                // the music from the main_menu activity will be paused
-                stopMusic();
-
                 // this will switch to the new activity.
                 startActivity(intent);
             }
@@ -70,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 // this will link this activity to the type quiz activity
                 Intent intent = new Intent(MainActivity.this, TypeQuiz.class);
 
-                // the music from the main_menu activity will be paused
-                stopMusic();
-
                 // this will switch to the new activity.
                 startActivity(intent);
             }
@@ -83,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent( MainActivity.this, Pokedex.class);
 
-                stopMusic();
                 startActivity(intent1);
             }
         });
@@ -95,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void InitializeMediaPlayer() {
-
         if(mediaPlayer == null){
             // sets the song to use for the main menu
             mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
@@ -104,7 +93,19 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.setLooping(true);
         }
 
-        if(!(mediaPlayer.isPlaying())){
+        try{
+            if(!(mediaPlayer.isPlaying())){
+                // will start playing the song when the main menu is created.
+                mediaPlayer.start();
+            }
+        }
+        catch(IllegalStateException ex){
+            ex.printStackTrace();
+            // sets the song to use for the main menu
+            mediaPlayer = MediaPlayer.create(this, R.raw.main_menu_song);
+
+            // making the song to loop once it ends
+            mediaPlayer.setLooping(true);
             // will start playing the song when the main menu is created.
             mediaPlayer.start();
         }
@@ -114,34 +115,33 @@ public class MainActivity extends AppCompatActivity {
     // or when the app is sent to the background.
     @Override
     protected void onPause() {
-        super.onPause();
-
         try{
-            mediaPlayer.pause();
+            mediaPlayer.stop();
+            mediaPlayer.release();
         }
         catch (Exception ex){
             ex.printStackTrace();
         }
+        super.onPause();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
-
         try{
             stopMusic();
         }
         catch(Exception ex){
             ex.printStackTrace();
         }
+        super.onStop();
     }
 
     // this code will run when the application resumes.
     // when returning from another activity.
     @Override
     protected void onResume() {
-        super.onResume();
         // will start the song.
         InitializeMediaPlayer();
+        super.onResume();
     }
 }
